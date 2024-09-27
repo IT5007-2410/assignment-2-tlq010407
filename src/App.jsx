@@ -3,10 +3,15 @@ const initialTravellers = [
   {
     id: 1, name: 'Jack', phone: 88885555,
     bookingTime: new Date(),
+    seatNumber: A1,
+    travelDate: new Date(),
+    destination: 'New York',
+    
   },
   {
     id: 2, name: 'Rose', phone: 88884444,
     bookingTime: new Date(),
+    seatNumber: A2
   },
 ];
 
