@@ -78,6 +78,7 @@ class Add extends React.Component {
       travelDate: new Date(),
       seatNumber: form.seatNumber.value,
     };
+
     // Call bookTraveller method from parent component (pass traveller object)
     this.props.bookTraveller(traveller);
 
@@ -141,13 +142,18 @@ class Delete extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
+    const form = document.forms.deleteTraveller;
+    // Call deleteTraveller method from parent component (passenger name)
+    this.props.deleteTraveller(form.travellername.value);
+    // Clear the form field
+    form.travellername.value = '';
   }
 
   render() {
     return (
       <form name="deleteTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-	<input type="text" name="travellername" placeholder="Name" />
+	      <input type="text" name="travellername" placeholder="Name" required/>
         <button>Delete</button>
       </form>
     );
