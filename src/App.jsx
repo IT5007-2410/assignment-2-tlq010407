@@ -3,24 +3,31 @@ const initialTravellers = [
   {
     id: 1, name: 'Jack', phone: 88885555,
     bookingTime: new Date(),
-    seatNumber: A1,
     travelDate: new Date(),
-    destination: 'New York',
-    
+    seatNumber: A1,
   },
   {
     id: 2, name: 'Rose', phone: 88884444,
     bookingTime: new Date(),
+    travelDate: new Date(),
     seatNumber: A2
   },
 ];
 
 
 function TravellerRow(props) {
-  {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
+    {/*Q3. Placeholder to initialize local variable based on traveller prop.*/
+      const traveller = props.traveller;
+    }
   return (
     <tr>
-	  {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      <td>{traveller.id}</td>
+      <td>{traveller.name}</td>
+      <td>{traveller.phone}</td>
+      <td>{traveller.bookingTime.toLocaleString()}</td>
+      <td>{traveller.travelDate.toLocaleDateString()}</td>
+      <td>{traveller.seatNumber}</td>
     </tr>
   );
 }
@@ -28,7 +35,7 @@ function TravellerRow(props) {
 function Display(props) {
   
 	/*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
-
+  const travellerRows = props.travellers.map(traveller => <TravellerRow key={traveller.id} traveller={traveller} />);
   return (
     <table className="bordered-table">
       <thead>
@@ -38,10 +45,14 @@ function Display(props) {
           <th>Name</th>
           <th>Phone</th>
           <th>Booking Time</th>
+          <th>Travel Date</th>
+          <th>Seat Number</th>
         </tr>
       </thead>
       <tbody>
-        {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/
+          travellerRows
+        }
       </tbody>
     </table>
   );
@@ -98,7 +109,9 @@ class Homepage extends React.Component {
 	render(){
 	return (
 	<div>
-		{/*Q2. Placeholder for Homepage code that shows free seats visually.*/}
+		{/*Q2. Placeholder for Homepage code that shows free seats visually.*/
+     
+    }
 	</div>);
 	}
 }
