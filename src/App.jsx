@@ -59,6 +59,7 @@ function Display(props) {
 }
 
 class Add extends React.Component {
+  //Placeholder for Add component state
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -67,14 +68,65 @@ class Add extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+    const form = document.forms.addTraveller;
+    // Create a traveller object
+    const traveller = {
+      id: this.props.travellers.length + 1,
+      name: form.travellername.value,
+      phone: form.phone.value,
+      bookingTime: new Date(),
+      travelDate: new Date(),
+      seatNumber: form.seatNumber.value,
+    };
+    // Call bookTraveller method from parent component (pass traveller object)
+    this.props.bookTraveller(traveller);
+
+    // Clear the form fields
+    this.setState({
+      travellername: '',
+      phone: '',
+      travelDate: '',
+      seatNumber: '',
+    });
   }
 
   render() {
     return (
       <form name="addTraveller" onSubmit={this.handleSubmit}>
-	    {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" />
-        <button>Add</button>
+         {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
+        <input 
+          type="text" 
+          name="travellername" 
+          placeholder="Name" 
+          value={this.state.travellername} 
+          onChange={this.handleInputChange} 
+          required 
+        />
+        <input 
+          type="text" 
+          name="phone" 
+          placeholder="Phone" 
+          value={this.state.phone} 
+          onChange={this.handleInputChange} 
+          required 
+        />
+        <input 
+          type="date" 
+          name="travelDate" 
+          placeholder="Travel Date" 
+          value={this.state.travelDate} 
+          onChange={this.handleInputChange} 
+          required 
+        />
+        <input 
+          type="text" 
+          name="seatNumber" 
+          placeholder="Seat Number" 
+          value={this.state.seatNumber} 
+          onChange={this.handleInputChange} 
+          required 
+        />
+        <button type="submit">Add</button>
       </form>
     );
   }
