@@ -10,11 +10,121 @@
 
   <script src="https://unpkg.com/@babel/polyfill@7/dist/polyfill.min.js"></script>
   <style>
-    table.bordered-table th, td {border: 1px solid silver; padding: 4px;}
-    table.bordered-table {border-collapse: collapse;}
-    .free-seat { background-color: green; padding: 10px; margin: 5px; }
-    .occupied-seat { background-color: red; padding: 10px; margin: 5px; }
-    .seating-grid { display: flex; flex-wrap: wrap; width: 200px; }
+    /* Table Structure */
+    table.bordered-table {
+      border-collapse: collapse; 
+      width: 100%;
+      margin: 20px 0; 
+      font-size: 16px; 
+      text-align: left; 
+    }
+
+    /* Table Headers */
+    table.bordered-table th {
+      background-color: #f2f2f2; 
+      color: #333; 
+      border: 1px solid silver; 
+      padding: 8px 12px; 
+      font-weight: bold; 
+    }
+
+    /* Hover Effect */
+    table.bordered-table tr:hover {
+      background-color: #f1f1f1; 
+    }
+
+    /* Seat Grid */
+    .seating-grid {
+      display: flex;
+      flex-wrap: wrap;
+      width: 50%;
+      margin-top: 20px;
+    }
+
+    .free-seat {
+      background-color: green;
+      color: white;
+      padding: 10px;
+      margin: 5px;
+      width: 50px;
+      text-align: center;
+    }
+
+    .occupied-seat {
+      background-color: red;
+      color: white;
+      padding: 10px;
+      margin: 5px;
+      width: 50px;
+      text-align: center;
+    }
+
+    /* Additional Styling for Better Readability */
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    input[type="date"] {
+      padding: 5px;
+      margin: 10px 0;
+    }
+    
+    /* Add Traveller Form */
+    form[name="addTraveller"] {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Input Fields */
+    form[name="addTraveller"] input[type="text"],
+    form[name="addTraveller"] input[type="date"] {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    /* Add Button */
+    form[name="addTraveller"] button {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form[name="addTraveller"] button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Form Heading */
+    form[name="addTraveller"] h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: #333;
+    }
   </style>
 </head>
 
