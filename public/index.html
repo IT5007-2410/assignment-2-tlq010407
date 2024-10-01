@@ -7,9 +7,75 @@
 
   <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-
   <script src="https://unpkg.com/@babel/polyfill@7/dist/polyfill.min.js"></script>
   <style>
+    h1 {
+      color: #333;
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      margin: 20px 0;
+    }
+    h2 {
+      color: #333;
+      font-size: 20px;
+      font-weight: 500;
+      text-align: center;
+      margin: 20px 0;
+    }
+    h3 {
+      color: #333;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      margin: 20px 0;
+    }
+    p{
+      color: #333;
+      font-size: 16px;
+      font-weight: 400;
+      text-align: center;
+      margin: 20px 0;
+    }
+    /* Styling the nav menu */
+    nav {
+      margin-bottom: 20px;
+      background-color: #007bff; /* Set entire background to blue */
+      padding: 15px 0; /* Add some padding for spacing */
+      border-radius: 8px; /* Optional: for rounded corners */
+    }
+
+    /* Flexbox to arrange the list items horizontally */
+    .nav-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0; /* Remove default margins */
+      display: flex;
+      justify-content: space-around; /* Evenly space the items */
+      align-items: center; /* Aligns items vertically centered */
+    }
+
+    /* List items styling */
+    .nav-menu li {
+      display: inline;
+    }
+
+    /* Anchor tags styled like buttons */
+    .nav-menu a {
+      text-decoration: none;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover effects */
+    }
+
+    .nav-menu a:hover {
+      background-color: #003d7a; /* Darker blue on hover */
+      transform: scale(1.05); /* Slight scaling effect on hover */
+    }
+
     /* Table Structure */
     table.bordered-table {
       border-collapse: collapse; 
@@ -37,8 +103,17 @@
     .seating-grid {
       display: flex;
       flex-wrap: wrap;
-      width: 50%;
-      margin-top: 20px;
+      justify-content: center;
+      gap: 10px; /* Space between seats */
+    }
+
+    .date-picker-container {
+      display: flex;
+      justify-content: center; /* Centers the element horizontally */
+      align-items: center; /* Centers vertically, but this can be controlled based on the container height */
+      height: auto; /* Adjust this based on your requirements */
+      margin: 20px 0; /* Optional: Add some margin if needed */
+      width: 100%; /* Full width container */
     }
 
     .free-seat {
@@ -74,56 +149,150 @@
       background-color: #0056b3;
     }
 
+    /* Date input field styling */
     input[type="date"] {
-      padding: 5px;
-      margin: 10px 0;
+      padding: 10px; /* Add padding for better spacing */
+      border: 1px solid #ccc; /* Light border */
+      border-radius: 5px; /* Rounded corners */
+      font-size: 16px; /* Adjust font size */
+      background-color: #f9f9f9; /* Light background color */
+      color: #333; /* Text color */
+      width: 200px; /* Set a fixed width for the input */
+      transition: border-color 0.3s ease, background-color 0.3s ease;
     }
-    
+
     /* Add Traveller Form */
     form[name="addTraveller"] {
       display: flex;
       flex-direction: column;
-      width: 300px;
+      width: 350px; /* Wider form for better readability */
       margin: 20px auto;
-      padding: 20px;
+      padding: 25px;
       border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: #fdfdfd;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow for a floating effect */
+    }
+
+    /* Label Styling */
+    form[name="addTraveller"] label {
+      font-size: 16px;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
     }
 
     /* Input Fields */
     form[name="addTraveller"] input[type="text"],
-    form[name="addTraveller"] input[type="date"] {
+    form[name="addTraveller"] input[type="date"],
+    form[name="addTraveller"] select {
       padding: 10px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 16px;
+      background-color: #fff;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Slight inner shadow for depth */
+      transition: border 0.3s ease;
+    }
+
+    form[name="addTraveller"] input[type="text"]:focus,
+    form[name="addTraveller"] input[type="date"]:focus,
+    form[name="addTraveller"] select:focus {
+      border: 1px solid #007bff; /* Blue border on focus */
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Glow effect on focus */
     }
 
     /* Add Button */
     form[name="addTraveller"] button {
-      padding: 10px;
+      padding: 12px;
       background-color: #007bff;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     form[name="addTraveller"] button:hover {
-      background-color: #0056b3;
+      background-color: #0056b3; /* Darker blue on hover */
+      box-shadow: 0 3px 8px rgba(0, 91, 187, 0.3); /* Add subtle shadow on hover */
+    }
+
+    /* Add Button Active State */
+    form[name="addTraveller"] button:active {
+      background-color: #004494;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Inner shadow on button press */
     }
 
     /* Form Heading */
     form[name="addTraveller"] h3 {
       text-align: center;
       margin-bottom: 20px;
-      font-size: 20px;
+      font-size: 22px;
       color: #333;
+      font-weight: 600;
+    }
+
+    /* Placeholder Styling */
+    form[name="addTraveller"] input::placeholder,
+    form[name="addTraveller"] select {
+      color: #aaa; /* Lighter color for placeholders */
+    }
+
+    /* Select Dropdown Styling */
+    form[name="addTraveller"] select {
+      appearance: none;
+      background: #fff;
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 15px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 400px) {
+      form[name="addTraveller"] {
+        width: 90%; /* Make form responsive for smaller screens */
+      }
+    }
+
+    /* Form Container */
+    form[name="deleteTraveller"] {
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Label Styling */
+    form[name="deleteTraveller"] label {
+      font-size: 40px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Button Styling */
+    form[name="deleteTraveller"] button {
+      padding: 5px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form[name="deleteTraveller"] button:hover {
+      background-color: #c9302c;
     }
   </style>
 </head>

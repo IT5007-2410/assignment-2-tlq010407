@@ -68,6 +68,7 @@ class Add extends React.Component {
       phone: '',
       seatNumber: '',
       travelDate: '',
+      errorMessage:'',  // Add an error message state
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -77,6 +78,24 @@ class Add extends React.Component {
   handleInputChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  }
+
+  // Filter out occupied seats for the selected travel date
+  getAvailableSeats() {
+    const totalSeats = 10;
+    const { travellers } = this.props;
+    const { travelDate } = this.state;
+
+    // Filter travellers by selected travel date
+    const occupiedSeats = travellers
+      .filter(traveller => traveller.travelDate === travelDate)
+      .map(traveller => traveller.seatNumber);
+
+    // Create an array of all seats (A1, A2, ..., A10)
+    const allSeats = Array.from({ length: totalSeats }, (_, i) => `A${i + 1}`);
+
+    // Filter out the occupied seats to get available seats
+    return allSeats.filter(seat => !occupiedSeats.includes(seat));
   }
 
   handleSubmit(e) {
@@ -108,6 +127,7 @@ class Add extends React.Component {
   }
 
   render() {
+    const availableSeats = this.getAvailableSeats(); // Get available seats based on the selected travel date
     return (
       <form name="addTraveller" onSubmit={this.handleSubmit}>
         <div>
@@ -145,21 +165,28 @@ class Add extends React.Component {
             placeholder="Travel Date"
             value={this.state.travelDate}
             onChange={this.handleInputChange}
+            min={new Date().toISOString().split('T')[0]} // Ensures date from today onwards
             required
           />
         </div>
 
         <div>
           <label htmlFor="seatNumber">Seat: </label>
-          <input
-            type="text"
+          <select
             name="seatNumber"
             id="seatNumber"
-            placeholder="Seat"
             value={this.state.seatNumber}
             onChange={this.handleInputChange}
             required
-          />
+            disabled={!this.state.travelDate} // Disable if no date is selected
+          >
+            <option value="">Select a seat</option>
+            {availableSeats.map(seat => (
+              <option key={seat} value={seat}>
+                {seat}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button type="submit">Add</button>
@@ -172,26 +199,55 @@ class Add extends React.Component {
 class Delete extends React.Component {
   constructor() {
     super();
+    this.state = {
+      errorMessage: '', // Store an error message if the name is invalid
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(e) {
     e.preventDefault();
-    /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
     const form = document.forms.deleteTraveller;
-    // Call deleteTraveller method from parent component (passenger name)
     const name = form.travellername.value;
-    this.props.deleteTraveller(name);
-    // Clear the form field
-    form.travellername.value = '';
+
+    // Check if the traveler exists
+    const travelerExists = this.props.travellers.some(traveller => traveller.name === name);
+
+    if (!travelerExists) {
+      // If traveler does not exist, show an error message
+      this.setState({ errorMessage: 'Invalid input: Traveler does not exist' });
+      return;
+    }
+
+    // Show a confirmation popup if the traveler exists
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${name}?`);
+
+    if (confirmDelete) {
+      // Call deleteTraveller method from parent component (passenger name)
+      this.props.deleteTraveller(name);
+
+      // Clear the form field
+      form.travellername.value = '';
+      this.setState({ errorMessage: '' }); // Clear error message after successful deletion
+    }
   }
 
   render() {
     return (
-      <form name="deleteTraveller" onSubmit={this.handleSubmit}>
-         {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" required />
-        <button>Delete</button>
-      </form>
+      <div>
+        <form name="deleteTraveller" onSubmit={this.handleSubmit}>
+          {/* Input field for traveler name */}
+          <input type="text" name="travellername" placeholder="Name" required />
+          
+          {/* Delete button */}
+          <button type="submit">Delete</button>
+        </form>
+
+        {/* Show error message if invalid name */}
+        {this.state.errorMessage && (
+          <p style={{ color: 'red' }}>{this.state.errorMessage}</p>
+        )}
+      </div>
     );
   }
 }
@@ -220,8 +276,10 @@ class Homepage extends React.Component {
       t => t.travelDate === selectedDate
     );
 
+    // Get the seat numbers of the occupied seats
     const occupiedSeats = filteredTravellers.map(t => t.seatNumber);
 
+    // Create an array of all seats (A1, A2, ..., A10)
     const seats = [];
     for (let i = 1; i <= totalSeats; i++) {
       const seat = `A${i}`;
@@ -238,12 +296,15 @@ class Homepage extends React.Component {
     return (
       <div>
         <h3>Select Travel Date</h3>
-        <input
-          type="date"
-          value={this.state.selectedDate}
-          onChange={this.handleDateChange}
-          required
-        />
+        {/* Input field for selecting travel date */}
+        <div className="date-picker-container">
+          <input
+            type="date"
+            value={this.state.selectedDate}
+            onChange={this.handleDateChange}
+            required
+          />
+        </div>
         <div className="seating-grid">
           {selectedDate ? (
             seats
@@ -288,29 +349,51 @@ class TicketToRide extends React.Component {
   }
 
   deleteTraveller(name) {
-     /*Q5. Delete a passenger by name from the traveller state variable.*/
-    const newTravellers = this.state.travellers.filter(traveller => traveller.name !== name);
-    this.setState({ travellers: newTravellers });
+    /*Q5. Delete a passenger by name from the traveller state variable.*/
+    // Ensure the name is valid
+    if (!name || typeof name !== 'string') {
+      console.error("Invalid traveller name:", name);
+      return;
+    }
+
+    // Delete a passenger by filtering out the traveller with the provided name
+    const newTravellers = this.state.travellers.filter(traveller => traveller.name.toLowerCase() !== name.toLowerCase());
+
+    // Update the state with the new travellers list
+    this.setState({ travellers: newTravellers }, () => {
+      console.log(`Traveller "${name}" deleted successfully.`);
+    });
   }
 
   render() {
     const { selector, travellers } = this.state;
     let content;
-
+  
     if (selector === 1) content = <Homepage travellers={travellers} />;
     if (selector === 2) content = <Display travellers={travellers} />;
     if (selector === 3) content = <Add bookTraveller={this.bookTraveller} travellers={travellers} />;
-    if (selector === 4) content = <Delete deleteTraveller={this.deleteTraveller} />;
+    if (selector === 4) content = <Delete deleteTraveller={this.deleteTraveller} travellers={travellers} />;
+  
     console.log("Current selector:", selector);
     return (
       <div>
         <h1>Ticket To Ride</h1>
-        <div>
-          <button onClick={() => this.setSelector(1)}>Homepage</button>
-          <button onClick={() => this.setSelector(2)}>View Travellers</button>
-          <button onClick={() => this.setSelector(3)}>Add Traveller</button>
-          <button onClick={() => this.setSelector(4)}>Delete Traveller</button>
-        </div>
+        <nav>
+          <ul className="nav-menu">
+            <li>
+              <a href="#homepage" onClick={() => this.setSelector(1)}>Homepage</a>
+            </li>
+            <li>
+              <a href="#view-travellers" onClick={() => this.setSelector(2)}>View Travellers</a>
+            </li>
+            <li>
+              <a href="#add-traveller" onClick={() => this.setSelector(3)}>Add Traveller</a>
+            </li>
+            <li>
+              <a href="#delete-traveller" onClick={() => this.setSelector(4)}>Delete Traveller</a>
+            </li>
+          </ul>
+        </nav>
         <div>{content}</div>
       </div>
     );
