@@ -77,6 +77,7 @@ class Add extends React.Component {
   // Handle input changes to update state
   handleInputChange(e) {
     const { name, value } = e.target;
+    // Update the state for all form fields
     this.setState({ [name]: value });
   }
 
@@ -104,6 +105,19 @@ class Add extends React.Component {
     // Fetch the passenger details from the form and call bookTraveller()
     const { travellername, phone, seatNumber, travelDate } = this.state;
 
+    // Validate the name 
+    const namePattern = /^[A-Za-z\s]+$/;  // Allows alphabetic characters and spaces
+    if (!namePattern.test(travellername)) {
+      this.setState({ errorMessage: 'Please enter only alphabetic characters in the name.' });
+      return; // Stop form submission if validation fails
+    }
+    // Validate the phone number 
+    const phonePattern = /^[0-9]{8}$/;  // Adjust the pattern based on your required format
+    if (!phonePattern.test(phone)) {
+      this.setState({ errorMessage: 'Please enter a valid 8-digit phone number.' });
+      return; // Stop form submission if validation fails
+    }
+
     // Create a traveller object
     const traveller = {
       id: this.props.travellers.length + 1, // Create a unique ID
@@ -123,6 +137,7 @@ class Add extends React.Component {
       phone: '',
       travelDate: '',
       seatNumber: '',
+      errorMessage: '', // Clear error message
     });
   }
 
@@ -188,8 +203,9 @@ class Add extends React.Component {
             ))}
           </select>
         </div>
-
         <button type="submit">Add</button>
+        {/* Display error message if phone number is invalid */}
+        {this.state.errorMessage && <p style={{ color: 'red' }}>{this.state.errorMessage}</p>}
       </form>
     );
   }
