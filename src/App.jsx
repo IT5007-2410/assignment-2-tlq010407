@@ -1,27 +1,27 @@
 /*Q1. JS Variable needs to be created here. Below variable is just an example. Try to add more attributes.*/
 const initialTravellers = [
   {
-    id: 1, name: 'Jack', 
+    id: 1, name: 'Jack',
     phone: 88885555,
     bookingTime: new Date(),
-    travelDate: "2021-10-10",
-    seatNumber: 'A1', 
+    travelDate: "2024-10-10",
+    seatNumber: 'A1',
   },
   {
-    id: 2, name: 'Rose', 
+    id: 2, name: 'Rose',
     phone: 88884444,
     bookingTime: new Date(),
-    travelDate: "2021-10-10",
-    seatNumber: 'A2', 
+    travelDate: "2024-10-10",
+    seatNumber: 'A2',
   },
 ];
 
 // TravellerRow Component
 function TravellerRow(props) {
-  {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
+  {/*Q3. Placeholder to initialize local variable based on traveller prop.*/ }
   const traveller = props.traveller;
   return (
-  /*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/
+    /*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/
     <tr>
       <td>{traveller.id}</td>
       <td>{traveller.name}</td>
@@ -35,8 +35,8 @@ function TravellerRow(props) {
 
 // Display Component
 function Display(props) {
-/*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
-const travellerRows = props.travellers.map(traveller => <TravellerRow key={traveller.id} traveller={traveller} />);
+  /*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
+  const travellerRows = props.travellers.map(traveller => <TravellerRow key={traveller.id} traveller={traveller} />);
   return (
     <table className="bordered-table">
       <thead>
@@ -51,8 +51,8 @@ const travellerRows = props.travellers.map(traveller => <TravellerRow key={trave
         </tr>
       </thead>
       <tbody>
-         {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
-         {travellerRows}
+        {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {travellerRows}
       </tbody>
     </table>
   );
@@ -68,7 +68,7 @@ class Add extends React.Component {
       phone: '',
       seatNumber: '',
       travelDate: '',
-      errorMessage:'',  // Add an error message state
+      errorMessage: '',  // Add an error message state
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -254,7 +254,7 @@ class Delete extends React.Component {
         <form name="deleteTraveller" onSubmit={this.handleSubmit}>
           {/* Input field for traveler name */}
           <input type="text" name="travellername" placeholder="Name" required />
-          
+
           {/* Delete button */}
           <button type="submit">Delete</button>
         </form>
@@ -359,7 +359,7 @@ class TicketToRide extends React.Component {
   }
 
   bookTraveller(traveller) {
-     /*Q4. Add a passenger to the traveller state variable.*/
+    /*Q4. Add a passenger to the traveller state variable.*/
     const newTravellers = [...this.state.travellers, traveller];
     this.setState({ travellers: newTravellers });
   }
@@ -384,12 +384,12 @@ class TicketToRide extends React.Component {
   render() {
     const { selector, travellers } = this.state;
     let content;
-  
+
     if (selector === 1) content = <Homepage travellers={travellers} />;
     if (selector === 2) content = <Display travellers={travellers} />;
     if (selector === 3) content = <Add bookTraveller={this.bookTraveller} travellers={travellers} />;
     if (selector === 4) content = <Delete deleteTraveller={this.deleteTraveller} travellers={travellers} />;
-  
+
     console.log("Current selector:", selector);
     return (
       <div>
