@@ -36,12 +36,14 @@ function TravellerRow(props) {
 // Display Component
 function Display(props) {
   /*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
+  // Map each traveller to a TravellerRow component
   const travellerRows = props.travellers.map(traveller => <TravellerRow key={traveller.id} traveller={traveller} />);
   return (
     <table className="bordered-table">
       <thead>
         <tr>
           {/*Q3. Below table is just an example. Add more columns based on the traveller attributes you choose.*/}
+          {/* Placeholder to render table header with required column names.*/}
           <th>ID</th>
           <th>Name</th>
           <th>Phone</th>
@@ -52,6 +54,7 @@ function Display(props) {
       </thead>
       <tbody>
         {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {/* Placeholder to render table rows with traveller data */}
         {travellerRows}
       </tbody>
     </table>
@@ -70,7 +73,9 @@ class Add extends React.Component {
       travelDate: '',
       errorMessage: '',  // Add an error message state
     };
+    // Bind the event handlers
     this.handleSubmit = this.handleSubmit.bind(this);
+    // Bind the event handler for input changes
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -295,16 +300,25 @@ class Homepage extends React.Component {
     // Get the seat numbers of the occupied seats
     const occupiedSeats = filteredTravellers.map(t => t.seatNumber);
 
-    // Create an array of all seats (A1, A2, ..., A10)
+    // Create an array of all seats
     const seats = [];
+    // To count free seats
+    let freeSeatCount = 0;
+    // Loop through all seats and check if they are occupied
     for (let i = 1; i <= totalSeats; i++) {
       const seat = `A${i}`;
+      const isOccupied = occupiedSeats.includes(seat);
+
+      // Count free seats
+      if (!isOccupied) freeSeatCount++;
+
+      // Push the seat to the seats array without seat number, only the status
       seats.push(
         <div
           key={seat}
-          className={occupiedSeats.includes(seat) ? "occupied-seat" : "free-seat"}
+          className={isOccupied ? "occupied-seat" : "free-seat"}
         >
-          {seat}
+          {isOccupied ? "Occupied" : "Free"}
         </div>
       );
     }
@@ -323,7 +337,14 @@ class Homepage extends React.Component {
         </div>
         <div className="seating-grid">
           {selectedDate ? (
-            seats
+            <>
+              {/* Display the seat grid */}
+              {seats}
+              <div>
+                {/* Display free seats count */}
+                <p>Total Free Seats: {freeSeatCount}</p>
+              </div>
+            </>
           ) : (
             <p>Please select a travel date to view seat availability</p>
           )}
